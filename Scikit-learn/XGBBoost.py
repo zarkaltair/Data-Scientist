@@ -17,10 +17,10 @@ my_imputer = SimpleImputer()
 train_X = my_imputer.fit_transform(train_X)
 test_X = my_imputer.transform(test_X)
 # select XGBRegressor
-my_model = XGBRegressor(n_estimators=1000, learning_rate=0.01)
+my_model = XGBRegressor(n_estimators=750, learning_rate=0.02)
 # Add silent=True to avoid printing out updates with each cycle
 my_model.fit(train_X, train_y, early_stopping_rounds=50, eval_set=[(test_X, test_y)], verbose=False)
 # make predictions
 predictions = my_model.predict(test_X)
 # print(MAE)
-print("Mean Absolute Error : " + str(mean_absolute_error(predictions, test_y)))
+print("Mean Absolute Error: " + str(mean_absolute_error(predictions, test_y)))

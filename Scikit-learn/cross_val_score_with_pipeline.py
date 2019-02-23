@@ -2,13 +2,14 @@ import pandas as pd
 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error
-from sklearn.pipeline import make_pipeline
 from sklearn.impute import SimpleImputer
 from xgboost.sklearn import XGBRegressor
+from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import cross_val_score
 
 
 data = pd.read_csv('train.csv')
+
 data.dropna(axis=0, subset=['SalePrice'], inplace=True)
 y = data.SalePrice
 X = data.drop(['SalePrice'], axis=1).select_dtypes(exclude=['object'])
