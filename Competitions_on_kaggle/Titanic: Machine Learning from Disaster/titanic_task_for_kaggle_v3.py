@@ -8,7 +8,7 @@ Original file is located at
 """
 
 import pandas as pd
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.impute import SimpleImputer
 
 train_data = 'train.csv'
@@ -27,10 +27,10 @@ my_imputer = SimpleImputer()
 x = my_imputer.fit_transform(x)
 test_x = my_imputer.transform(test_x)
 
-dt = DecisionTreeClassifier(random_state=1)
+dt = RandomForestClassifier(n_estimators=1000, random_state=1)
 dt.fit(x, y)
 predictions = dt.predict(test_x)
 
 output = pd.DataFrame({'PassengerId': test_df.PassengerId,
                        'Survived': predictions})
-output.to_csv('submission_v1.csv', index=False)
+output.to_csv('submission_v3.csv', index=False)
