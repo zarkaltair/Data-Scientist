@@ -21,10 +21,13 @@ x = df.drop(['Rings'], axis=1)
 
 kf = KFold(n_splits=5, shuffle=True, random_state=1)
 
-arr = []
+arr = [0]
 for i in range(1, 51):
     rf_model = RandomForestRegressor(n_estimators=i, random_state=1)
     rf_model.fit(x, y)
     score = cross_val_score(rf_model, x, y, cv=kf, scoring='r2')
     arr.append(score.mean())
 arr
+
+ss = pd.DataFrame(arr)
+ss[0].plot.bar()
