@@ -25,6 +25,11 @@ wheels/
 *.egg
 MANIFEST
 
+# folders
+Scikit-learn/mlcourse.ai/Task_8_vowpal_wabbit/imdb_reviews
+My_projects/test_task/test_2.csv
+My_projects/test_task/train_2.csv
+
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
