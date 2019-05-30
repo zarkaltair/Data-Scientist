@@ -29,6 +29,8 @@ MANIFEST
 Scikit-learn/mlcourse.ai/Task_8_vowpal_wabbit/imdb_reviews
 My_projects/test_task/test_2.csv
 My_projects/test_task/train_2.csv
+Course_on_stepik/Decision_trees/Lesson_4_stepik_ml_contest/event_data_train.zip
+Course_on_stepik/Decision_trees/Lesson_4_stepik_ml_contest/submissions_data_train.zip
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
