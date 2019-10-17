@@ -1,3 +1,6 @@
+from pprint import pprint
+
+
 # def modify_list(l):
 #     for i in l:
 #         if i % 2 != 0:
@@ -176,18 +179,60 @@
 #     file.write(str(len(ans)))
 
 
-import requests
+# import requests
 
-def get_file(url):
-    return requests.get(url).text
+# def get_file(url):
+#     return requests.get(url).text
 
-with open('dataset_3378_3.txt', 'r') as file:
-    s = file.read().strip()
-    res = get_file(s)
-    while 'We' not in res:
-        url = 'https://stepic.org/media/attachments/course67/3.6.3/' + res
-        res = get_file(url)
-        print(res)
+# with open('dataset_3378_3.txt', 'r') as file:
+#     s = file.read().strip()
+#     res = get_file(s)
+#     while 'We' not in res:
+#         url = 'https://stepic.org/media/attachments/course67/3.6.3/' + res
+#         res = get_file(url)
+#         print(res)
         
-with open('answer_5.txt', 'w') as file:
-	file.write(res)
+# with open('answer_5.txt', 'w') as file:
+# 	file.write(res)
+
+'''
+n, x = int(input()), 0
+arr = []
+while x != n:
+    x += 1
+    arr.append(input().split(' '))
+x = sum([int(i[1]) if i[0] == 'восток' else -int(i[1]) if i[0] == 'запад' else 0 for i in arr])
+y = sum([int(i[1]) if i[0] == 'север' else -int(i[1]) if i[0] == 'юг' else 0 for i in arr])
+print(x, y)
+
+
+dict = {'север': 0, 'юг': 0, 'запад': 0, 'восток': 0}
+
+for _ in range(int(input())):
+    key, value = input().split()
+    dict[key] += int(value)
+
+print(dict['восток'] - dict['запад'], dict['север'] - dict['юг'])
+
+
+with open('dataset_3380_5.txt', 'r') as file:
+    dic = {}
+    for line in file:
+        arr = [int(i) for i in line.strip().split('\t') if i.isdigit()]
+        dict_line = dict(zip(arr[:1], arr[1:]))
+        for key, value in dict_line.items():
+            if key in dic:
+                dic[key] += [value]
+            else:
+                dic[key] = [value]
+    d = sorted(dic)
+    for i in d:
+        print(i, sum(dic.get(i)) / len(dic.get(i)))
+    # pprint(d)
+'''
+
+
+n, x = int(input()), 0
+while x != n:
+    x += 1
+    arr = input().split(';')
