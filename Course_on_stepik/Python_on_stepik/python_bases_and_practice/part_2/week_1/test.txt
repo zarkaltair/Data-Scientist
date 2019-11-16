@@ -1,0 +1,25 @@
+14
+a
+b : a
+c : a
+f : a
+d : c b
+g : d f
+i : g
+m : i
+n : i
+z : i
+e : m n
+y : z
+x : z
+w : e y x
+9
+y
+m
+n
+m
+d
+e
+g
+a
+f

@@ -1,0 +1,36 @@
+17
+DH : D BF DE AE
+D : AE
+B
+AE : F
+BG : H CH
+H
+E : CG B
+BH : CG
+CE
+CH : E
+C : CE
+A
+DE : BH
+F
+CG : C G
+G
+BF : F
+17
+DH
+D
+B
+AE
+BG
+H
+E
+BH
+CE
+CH
+C
+A
+DE
+F
+CG
+G
+BF
