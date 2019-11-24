@@ -1,0 +1,2 @@
+\w denotes word character
+No slashes here
