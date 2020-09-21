@@ -1,0 +1,2 @@
+example string1
+example string2
