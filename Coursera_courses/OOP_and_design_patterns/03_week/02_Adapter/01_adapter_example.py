@@ -1,4 +1,3 @@
-# from System import *
 import re
 from abc import ABC, abstractmethod
 
@@ -56,13 +55,9 @@ system = System(text)
 
 # create instance of WordCounter
 counter = WordCounter()
-# raise error
+# raise AttributeError: 'WordCounter' object has no attribute 'process_text'
 # system.get_processed_text(counter)
 
-
-# create instance of System
-system = System(text)
-# print(system)
-
+# create adapter for system
 adapter = WordCounterAdapter(counter)
 system.get_processed_text(adapter)
