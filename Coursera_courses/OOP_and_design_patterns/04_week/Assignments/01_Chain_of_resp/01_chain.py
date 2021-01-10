@@ -8,51 +8,64 @@ class SomeObject:
 class EventGet:
     def __init__(self, kind):
         self.kind = kind
+        self.value = None
 
 
-class EventSet():
-    pass
+class EventSet:
+    def __init__(self, value):
+        self.kind = type(value)
+        self.value = value
 
 
 class NullHandler:
     def __init__(self, successor=None):
         self.__successor = successor
 
-    def handle(self, obj, event):
+    def handle(self, _obj, event):
         if self.__successor is not None:
-            return self.__successor.handle(obj, event)
+            return self.__successor.handle(_obj, event)
 
 
 class IntHandler(NullHandler):
-    def handle(self, obj, event):
-        if event.kind == int:
-            return obj.integer_field
+    def handle(self, _obj, event):
+        if event.kind == int and event.value is not None:
+            _obj.integer_field = event.value
+            return _obj.integer_field
+        elif event.kind == int and event.value is None:
+            return _obj.integer_field
         else:
-            return super().handle(obj, event)
+            return super().handle(_obj, event)
 
 
 class FloatHandler(NullHandler):
-    def handle(self, obj, event):
-        if event.kind == float:
-            return obj.float_field
+    def handle(self, _obj, event):
+        if event.kind == float and event.value is not None:
+            _obj.float_field = event.value
+            return _obj.float_field
+        elif event.kind == float and event.value is None:
+            return _obj.float_field
         else:
-            return super().handle(obj, event)
+            return super().handle(_obj, event)
 
 
 class StrHandler(NullHandler):
-    def handle(self, obj, event):
-        if event.kind == str:
-            return obj.string_field
+    def handle(self, _obj, event):
+        if event.kind == str and event.value is not None:
+            _obj.string_field = event.value
+            return _obj.string_field
+        elif event.kind == str and event.value is None:
+            return _obj.string_field
         else:
-            return super().handle(obj, event)
+            return super().handle(_obj, event)
 
 
+'''
 obj = SomeObject()
 obj.integer_field = 42
 obj.float_field = 3.14
 obj.string_field = "some text"
 
-chain = IntHandler(FloatHandler(StrHandler(NullHandler)))
+chain = IntHandler(FloatHandler(StrHandler(NullHandler())))
 
 print(chain.handle(obj, EventGet(int)))
 # 42
@@ -60,17 +73,17 @@ print(chain.handle(obj, EventGet(float)))
 # 3.14
 print(chain.handle(obj, EventGet(str)))
 # 'some text'
-'''
-chain.handle(obj, EventSet(100))
-chain.handle(obj, EventGet(int))
+
+print(chain.handle(obj, EventSet(-100)))
+print(chain.handle(obj, EventGet(int)))
 # 100
 
-chain.handle(obj, EventSet(0.5))
-chain.handle(obj, EventGet(float))
+print(chain.handle(obj, EventSet(0.5)))
+print(chain.handle(obj, EventGet(float)))
 # 0.5
 
-chain.handle(obj, EventSet('new text'))
-chain.handle(obj, EventGet(str))
+print(chain.handle(obj, EventSet('new text')))
+print(chain.handle(obj, EventGet(str)))
 # 'new text'
 
 
