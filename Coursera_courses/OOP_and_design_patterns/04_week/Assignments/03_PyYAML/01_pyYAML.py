@@ -1,38 +1,26 @@
+import pdb
 import yaml
 import random
 
-from abc import ABC
 from pprint import pprint
+from abc import ABC
 
 
 class AbstractLevel(yaml.YAMLObject):
-
     @classmethod
     def from_yaml(cls, loader, node):
+        # def get_lvl(loader, node):
+        data = loader.construct_mapping(node)
+        _map = cls.Map()
+        obj = cls.Objects()
+        obj.config.update(data)
+        return {'map': _map, 'obj': obj}
 
-        def get_easy_lvl(loader, node):
-            data = loader.construct_mapping(node)
-            _map = EasyLevel.Map()
-            obj = EasyLevel.Objects()
-            return {'map': _map, 'obj': obj}
-
-        def get_medium_lvl(loader, node):
-            data = loader.construct_mapping(node)
-            _map = MediumLevel.Map()
-            obj = MediumLevel.Objects()
-            return {'map': _map, 'obj': obj}
-
-        def get_hard_lvl(loader, node):
-            data = loader.construct_mapping(node)
-            _map = HardLevel.Map()
-            obj = HardLevel.Objects()
-            return {'map': _map, 'obj': obj}
-
-        loader.add_constructor("!easy_level", get_easy_lvl)
-        loader.add_constructor("!medium_level", get_medium_lvl)
-        loader.add_constructor("!hard_level", get_hard_lvl)
-        return loader.construct_mapping(node)
-
+        # loader.add_constructor(u"!easy_level", get_lvl)
+        # loader.add_constructor(u"!medium_level", get_lvl)
+        # loader.add_constructor(u"!hard_level", get_lvl)
+        # print(node)
+        # return loader.construct_mapping(node)
 
     @classmethod
     def get_map(cls):
@@ -50,7 +38,7 @@ class AbstractLevel(yaml.YAMLObject):
 
 
 class EasyLevel(AbstractLevel):
-    yaml_tag = '!easy_level'
+    yaml_tag = u'!easy_level'
 
     class Map:
         def __init__(self):
@@ -87,7 +75,7 @@ class EasyLevel(AbstractLevel):
 
 
 class MediumLevel(AbstractLevel):
-    yaml_tag = '!medium_level'
+    yaml_tag = u'!medium_level'
 
     class Map:
         def __init__(self):
@@ -124,7 +112,7 @@ class MediumLevel(AbstractLevel):
 
 
 class HardLevel(AbstractLevel):
-    yaml_tag = '!hard_level'
+    yaml_tag = u'!hard_level'
 
     class Map:
         def __init__(self):
@@ -165,30 +153,34 @@ class HardLevel(AbstractLevel):
             return self.objects
 
 
-doc = '''!easy_level {}'''
-level = yaml.load(doc)
+# level = yaml.load('''!easy_level {}''')
 # pprint(level)
-
-
-# Levels = yaml.load(
-# '''
-# levels:
-#     - !easy_level {}
-#     - !medium_level
-#         enemy: ['rat']
-#     - !hard_level
-#         enemy:
-#             - rat
-#             - snake
-#             - dragon
-#         enemy_count: 10
-# ''')
-# pprint(Levels)
-
-
 # {'map': <main.EasyLevel.Map object at 0x7f27f0c297f0>, 
 # 'obj': <main.EasyLevel.Objects object at 0x7f27ef5f1518>}
 
+
+# pdb.set_trace()
+# Levels = yaml.load(
+#     '''
+#     levels:
+#         - !easy_level {}
+#         - !medium_level
+#             enemy: ['rat']
+#         - !hard_level
+#             enemy:
+#                 - rat
+#                 - snake
+#                 - dragon
+#             enemy_count: 10
+#     ''')
+# # pprint(Levels)
+# medium_level = Levels['levels'][1]
+# print(medium_level)
+# print(medium_level['obj'].config)
+# medium_map = medium_level['map'].get_map()
+# pprint(medium_map)
+# medium_obj = medium_level['obj'].get_objects(medium_map)
+# pprint(medium_obj)
 
 # Levels = {'levels': []}
 # _map = EasyLevel.Map()
@@ -204,7 +196,7 @@ level = yaml.load(doc)
 # _obj = HardLevel.Objects()
 # _obj.config = {'enemy': ['rat', 'snake', 'dragon'], 'enemy_count': 10}
 # Levels['levels'].append({'map': _map, 'obj': _obj})
-# pprint(Levels)
+# # pprint(Levels)
 
 # medium_level = Levels['levels'][1]
 # print(medium_level)
