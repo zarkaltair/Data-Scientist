@@ -30,12 +30,16 @@ class ScreenHandle(pygame.Surface):
             self.successor.draw(canvas)
 
     # FIXME connect_engine
+    def connect_engine(self, engine):
+        pass
 
 
 class GameSurface(ScreenHandle):
 
     def connect_engine(self, engine):
         # FIXME save engine and send it to next in chain
+        self.game_engine = engine
+        return super().connect_engine(self.game_engine)
 
     def draw_hero(self):
         self.game_engine.hero.draw(self)
@@ -93,6 +97,8 @@ class ProgressBar(ScreenHandle):
 
     def connect_engine(self, engine):
         # FIXME save engine and send it to next in chain
+        self.engine = engine
+        return super().connect_engine(self.engine)
 
     def draw(self, canvas):
         self.fill(colors["wooden"])
@@ -173,8 +179,9 @@ class InfoWindow(ScreenHandle):
     # draw next surface in chain
 
     def connect_engine(self, engine):
-        # FIXME set this class as Observer to engine and send it to next in
-        # chain
+        # FIXME set this class as Observer to engine and send it to next in chain
+        self.engine = engine
+        return super().connect_engine(self.engine)
 
 
 class HelpWindow(ScreenHandle):
@@ -196,6 +203,8 @@ class HelpWindow(ScreenHandle):
 
     def connect_engine(self, engine):
         # FIXME save engine and send it to next in chain
+        self.engine = engine
+        return super().connect_engine(self.engine)
 
     def draw(self, canvas):
         alpha = 0
@@ -209,9 +218,9 @@ class HelpWindow(ScreenHandle):
             pygame.draw.lines(self, (255, 0, 0, 255), True, [
                               (0, 0), (700, 0), (700, 500), (0, 500)], 5)
             for i, text in enumerate(self.data):
-                self.blit(font1.render(text[0], True, ((128, 128, 255))),
+                self.blit(font1.render(text[0], True, (128, 128, 255)),
                           (50, 50 + 30 * i))
-                self.blit(font2.render(text[1], True, ((128, 128, 255))),
+                self.blit(font2.render(text[1], True, (128, 128, 255)),
                           (150, 50 + 30 * i))
     # FIXME
     # draw next surface in chain
