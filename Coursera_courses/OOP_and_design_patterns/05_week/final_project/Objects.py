@@ -11,6 +11,13 @@ def create_sprite(img, sprite_size):
     return sprite
 
 
+class AbstractObject(ABC):
+
+    # @abstractmethod
+    def draw(self, display):
+        pass
+
+
 class Interactive(ABC):
 
     @abstractmethod
@@ -35,11 +42,25 @@ class Creature(AbstractObject):
         self.sprite = icon
         self.stats = stats
         self.position = position
-        self.calc_max_HP()
+        self.calc_max_hp()
         self.hp = self.max_hp
 
-    def calc_max_HP(self):
+    def calc_max_hp(self):
         self.max_hp = 5 + self.stats["endurance"] * 2
+
+
+class Enemy(Creature, Interactive):
+
+    def __init__(self, icon, stats, xp, position):
+        # super().__init__(icon, stats, position)
+        self.sprite = icon
+        self.stats = stats
+        self.xp = xp
+        self.position = position
+
+    def interact(self, engine, hero):
+        # self.action = action(engine, hero)
+        pass
 
 
 class Hero(Creature):
@@ -57,8 +78,11 @@ class Hero(Creature):
             self.level += 1
             self.stats["strength"] += 2
             self.stats["endurance"] += 2
-            self.calc_max_HP()
+            self.calc_max_hp()
             self.hp = self.max_hp
+
+    def draw(self, display):
+        pass
 
 
 class Effect(Hero):
@@ -127,3 +151,16 @@ class Effect(Hero):
 
 # FIXME
 # add classes
+class Berserk:
+    def apply_effect(self):
+        pass
+
+
+class Blessing:
+    def apply_effect(self):
+        pass
+
+
+class Weakness:
+    def apply_effect(self):
+        pass
