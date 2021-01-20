@@ -20,8 +20,8 @@ class GameEngine:
             self.subscribers.remove(obj)
 
     def notify(self, message):
-        for i in self.subscribers:
-            i.update(message)
+        for subscriber in self.subscribers:
+            subscriber.update(message)
 
     # HERO
     def add_hero(self, hero):
