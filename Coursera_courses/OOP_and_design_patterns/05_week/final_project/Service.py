@@ -1,8 +1,10 @@
+import os
+import yaml
 import pygame
 import random
-import yaml
-import os
+
 import Objects
+
 
 OBJECT_TEXTURE = os.path.join("texture", "objects")
 ENEMY_TEXTURE = os.path.join("texture", "enemies")
@@ -39,8 +41,7 @@ def restore_hp(engine, hero):
 def apply_blessing(engine, hero):
     if hero.gold >= int(20 * 1.5**engine.level) - 2 * hero.stats["intelligence"]:
         engine.score += 0.2
-        hero.gold -= int(20 * 1.5**engine.level) - \
-            2 * hero.stats["intelligence"]
+        hero.gold -= int(20 * 1.5**engine.level) - 2 * hero.stats["intelligence"]
         if random.randint(0, 1) == 0:
             engine.hero = Objects.Blessing(hero)
             engine.notify("Blessing applied")
@@ -53,8 +54,7 @@ def apply_blessing(engine, hero):
 
 def remove_effect(engine, hero):
     if hero.gold >= int(10 * 1.5**engine.level) - 2 * hero.stats["intelligence"] and "base" in dir(hero):
-        hero.gold -= int(10 * 1.5**engine.level) - \
-            2 * hero.stats["intelligence"]
+        hero.gold -= int(10 * 1.5**engine.level) - 2 * hero.stats["intelligence"]
         engine.hero = hero.base
         engine.hero.calc_max_HP()
         engine.notify("Effect removed")
@@ -163,8 +163,7 @@ class RandomMap(MapFactory):
                                 coord = (random.randint(1, 39),
                                          random.randint(1, 39))
 
-                    self.objects.append(Objects.Ally(
-                        prop['sprite'], prop['action'], coord))
+                    self.objects.append(Objects.Ally(prop['sprite'], prop['action'], coord))
 
             for obj_name in object_list_prob['ally']:
                 prop = object_list_prob['ally'][obj_name]
@@ -183,8 +182,7 @@ class RandomMap(MapFactory):
                                 intersect = True
                                 coord = (random.randint(1, 39),
                                          random.randint(1, 39))
-                    self.objects.append(Objects.Ally(
-                        prop['sprite'], prop['action'], coord))
+                    self.objects.append(Objects.Ally(prop['sprite'], prop['action'], coord))
 
             for obj_name in object_list_prob['enemies']:
                 prop = object_list_prob['enemies'][obj_name]
@@ -204,8 +202,7 @@ class RandomMap(MapFactory):
                                 coord = (random.randint(1, 39),
                                          random.randint(1, 39))
 
-                    self.objects.append(Objects.Enemy(
-                        prop['sprite'], prop, prop['experience'], coord))
+                    self.objects.append(Objects.Enemy(prop['sprite'], prop, prop['experience'], coord))
 
             return self.objects
 
@@ -255,8 +252,7 @@ class EmptyMap(MapFactory):
             #                     coord = (random.randint(1, 39),
             #                              random.randint(1, 39))
             #
-            #         self.objects.append(Objects.Ally(
-            #             prop['sprite'], prop['action'], coord))
+            #         self.objects.append(Objects.Ally(prop['sprite'], prop['action'], coord))
             #
             # for obj_name in object_list_prob['ally']:
             #     prop = object_list_prob['ally'][obj_name]
@@ -275,8 +271,7 @@ class EmptyMap(MapFactory):
             #                     intersect = True
             #                     coord = (random.randint(1, 39),
             #                              random.randint(1, 39))
-            #         self.objects.append(Objects.Ally(
-            #             prop['sprite'], prop['action'], coord))
+            #         self.objects.append(Objects.Ally(prop['sprite'], prop['action'], coord))
             #
             # for obj_name in object_list_prob['enemies']:
             #     prop = object_list_prob['enemies'][obj_name]
@@ -296,8 +291,7 @@ class EmptyMap(MapFactory):
             #                     coord = (random.randint(1, 39),
             #                              random.randint(1, 39))
             #
-            #         self.objects.append(Objects.Enemy(
-            #             prop['sprite'], prop, prop['experience'], coord))
+            #         self.objects.append(Objects.Enemy(prop['sprite'], prop, prop['experience'], coord))
 
             return self.objects
 
@@ -345,8 +339,7 @@ class SpecialMap(MapFactory):
             #                     coord = (random.randint(1, 39),
             #                              random.randint(1, 39))
             #
-            #         self.objects.append(Objects.Ally(
-            #             prop['sprite'], prop['action'], coord))
+            #         self.objects.append(Objects.Ally(prop['sprite'], prop['action'], coord))
             #
             # for obj_name in object_list_prob['ally']:
             #     prop = object_list_prob['ally'][obj_name]
@@ -365,8 +358,7 @@ class SpecialMap(MapFactory):
             #                     intersect = True
             #                     coord = (random.randint(1, 39),
             #                              random.randint(1, 39))
-            #         self.objects.append(Objects.Ally(
-            #             prop['sprite'], prop['action'], coord))
+            #         self.objects.append(Objects.Ally(prop['sprite'], prop['action'], coord))
             #
             # for obj_name in object_list_prob['enemies']:
             #     prop = object_list_prob['enemies'][obj_name]
@@ -386,8 +378,7 @@ class SpecialMap(MapFactory):
             #                     coord = (random.randint(1, 39),
             #                              random.randint(1, 39))
             #
-            #         self.objects.append(Objects.Enemy(
-            #             prop['sprite'], prop, prop['experience'], coord))
+            #         self.objects.append(Objects.Enemy(prop['sprite'], prop, prop['experience'], coord))
 
             return self.objects
 
