@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import pygame
-import random
+# import random
 
 
 def create_sprite(img, sprite_size):
@@ -52,7 +52,6 @@ class Creature(AbstractObject):
 class Enemy(Creature, Interactive):
 
     def __init__(self, icon, stats, xp, position):
-        # super().__init__(icon, stats, position)
         self.sprite = icon
         self.stats = stats
         self.xp = xp
@@ -151,16 +150,31 @@ class Effect(Hero):
 
 # FIXME
 # add classes
-class Berserk:
+class Berserk(Effect):
     def apply_effect(self):
-        pass
+        stats = self.base.stats()
+        stats['strength'] += 10
+        stats['endurance'] += 10
+        stats['intelligence'] -= 3
+        stats['luck'] += 1
+        return stats
 
 
-class Blessing:
+class Blessing(Effect):
     def apply_effect(self):
-        pass
+        stats = self.base.stats()
+        stats['strength'] += 5
+        stats['endurance'] += 5
+        stats['intelligence'] += 5
+        stats['luck'] += 5
+        return stats
 
 
-class Weakness:
+class Weakness(Effect):
     def apply_effect(self):
-        pass
+        stats = self.base.stats()
+        stats['strength'] -= 5
+        stats['endurance'] -= 5
+        stats['intelligence'] -= 5
+        stats['luck'] -= 5
+        return stats
