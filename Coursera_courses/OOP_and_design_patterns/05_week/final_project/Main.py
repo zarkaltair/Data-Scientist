@@ -1,9 +1,10 @@
-import pygame
 import os
-import Objects
-import ScreenEngine as SE
+import pygame
+
 import Logic
+import Objects
 import Service
+import ScreenEngine as SE
 
 
 SCREEN_DIM = (800, 600)
@@ -28,24 +29,20 @@ base_stats = {
 def create_game(sprite_size, is_new):
     global hero, engine, drawer, iteration
     if is_new:
-        hero = Objects.Hero(base_stats, Service.create_sprite(
-            os.path.join("texture", "Hero.png"), sprite_size))
+        hero = Objects.Hero(base_stats, Service.create_sprite(os.path.join("texture", "Hero.png"), sprite_size))
         engine = Logic.GameEngine()
         Service.service_init(sprite_size)
         Service.reload_game(engine, hero)
-        # with ScreenEngine as SE:
-        drawer = SE.GameSurface((640, 480), pygame.SRCALPHA, (0, 480),
+        # create chain of responsibilities
+        drawer = SE.GameSurface((640, 480), pygame.SRCALPHA, (0, 480), 
                                 SE.ProgressBar((640, 120), (640, 0),
-                                               SE.InfoWindow((160, 600), (50, 50),
+                                               SE.InfoWindow((160, 600), (50, 50), 
                                                              SE.HelpWindow((700, 500), pygame.SRCALPHA, (0, 0),
-                                                                           SE.ScreenHandle(
-                                                                               (0, 0))
-                                                                           ))))
+                                                                           SE.ScreenHandle((0, 0))))))
 
     else:
         engine.sprite_size = sprite_size
-        hero.sprite = Service.create_sprite(
-            os.path.join("texture", "Hero.png"), sprite_size)
+        hero.sprite = Service.create_sprite(os.path.join("texture", "Hero.png"), sprite_size)
         Service.service_init(sprite_size, False)
 
     Logic.GameEngine.sprite_size = sprite_size
@@ -64,20 +61,20 @@ while engine.working:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 engine.working = False
-            if event.type == pygame.KEYDOWN:
+            elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_h:
                     engine.show_help = not engine.show_help
-                if event.key == pygame.K_KP_PLUS:
+                elif event.key == pygame.K_KP_PLUS:
                     size = size + 1
                     create_game(size, False)
-                if event.key == pygame.K_KP_MINUS:
+                elif event.key == pygame.K_KP_MINUS:
                     size = size - 1
                     create_game(size, False)
-                if event.key == pygame.K_r:
+                elif event.key == pygame.K_r:
                     create_game(size, True)
-                if event.key == pygame.K_ESCAPE:
+                elif event.key == pygame.K_ESCAPE:
                     engine.working = False
-                if engine.game_process:
+                elif engine.game_process:
                     if event.key == pygame.K_UP:
                         engine.move_up()
                         iteration += 1
@@ -92,7 +89,7 @@ while engine.working:
                         iteration += 1
                 else:
                     if event.key == pygame.K_RETURN:
-                        create_game()
+                        create_game(size, True)
     else:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -111,7 +108,7 @@ while engine.working:
             reward = engine.score - prev_score
             print(reward)
         else:
-            create_game()
+            create_game(size, True)
 
     gameDisplay.blit(drawer, (0, 0))
     drawer.draw(gameDisplay)
