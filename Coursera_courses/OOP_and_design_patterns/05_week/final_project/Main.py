@@ -38,7 +38,8 @@ def create_game(sprite_size, is_new):
                                 SE.ProgressBar((640, 120), (640, 0),
                                                SE.InfoWindow((160, 600), (50, 50), 
                                                              SE.HelpWindow((700, 500), pygame.SRCALPHA, (0, 0),
-                                                                           SE.ScreenHandle((0, 0))))))
+                                                                           SE.MiniMap((500, 500), pygame.SRCALPHA, (0, 0),
+                                                                                      SE.ScreenHandle((0, 0)))))))
 
     else:
         engine.sprite_size = sprite_size
@@ -64,6 +65,8 @@ while engine.working:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_h:
                     engine.show_help = not engine.show_help
+                elif event.key == pygame.K_m:
+                    engine.show_mini_map = not engine.show_mini_map
                 elif event.key == pygame.K_KP_PLUS:
                     size = size + 1
                     create_game(size, False)
