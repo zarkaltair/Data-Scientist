@@ -38,11 +38,6 @@ class ScreenHandle(pygame.Surface):
 
 class GameSurface(ScreenHandle):
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fill(colors["red"])
-        print(*args)
-
     def connect_engine(self, engine):
         # FIXME save engine and send it to next in chain
         self.game_engine = engine
@@ -58,7 +53,7 @@ class GameSurface(ScreenHandle):
         min_x = 0
         min_y = 0
 
-    ##
+        ##
 
         if self.game_engine.map:
             for i in range(len(self.game_engine.map[0]) - min_x):
@@ -72,31 +67,31 @@ class GameSurface(ScreenHandle):
         size = self.game_engine.sprite_size
         # print(sprite)
         # print(coord)
-    # FIXME || calculate (min_x,min_y) - left top corner
+        # FIXME || calculate (min_x,min_y) - left top corner
 
         min_x = 0
         min_y = 0
 
-    ##
+        ##
         self.blit(sprite, ((coord[0] - min_x) * self.game_engine.sprite_size,
                            (coord[1] - min_y) * self.game_engine.sprite_size))
 
     def draw(self, canvas):
         size = self.game_engine.sprite_size
         # print(size)
-    # FIXME || calculate (min_x,min_y) - left top corner
+        # FIXME || calculate (min_x,min_y) - left top corner
 
         min_x = 0
         min_y = 0
 
-    ##
+        ##
         self.draw_map()
         for obj in self.game_engine.objects:
             self.blit(obj.sprite[0], ((obj.position[0] - min_x) * self.game_engine.sprite_size,
                                       (obj.position[1] - min_y) * self.game_engine.sprite_size))
         self.draw_hero()
 
-    # draw next surface in chain
+        # draw next surface in chain
         return super().draw(canvas)
 
 
@@ -118,7 +113,7 @@ class ProgressBar(ScreenHandle):
         pygame.draw.rect(self, colors["black"], (50, 70, 200, 30), 2)
 
         pygame.draw.rect(self, colors["red"], (50, 30, 200 * self.engine.hero.hp / self.engine.hero.max_hp, 30))
-        pygame.draw.rect(self, colors["green"], (50, 70,200 * self.engine.hero.exp / (100 * (2**(self.engine.hero.level - 1))), 30))
+        pygame.draw.rect(self, colors["green"], (50, 70, 200 * self.engine.hero.exp / (100 * (2**(self.engine.hero.level - 1))), 30))
 
         font = pygame.font.SysFont("comicsansms", 20)
         self.blit(font.render(f'Hero at {self.engine.hero.position}', True, colors["black"]), (250, 0))
@@ -146,7 +141,7 @@ class ProgressBar(ScreenHandle):
         self.blit(font.render(f'SCORE', True, colors["black"]), (550, 30))
         self.blit(font.render(f'{self.engine.score:.4f}', True, colors["black"]), (550, 70))
 
-    # draw next surface in chain
+        # draw next surface in chain
         return super().draw(canvas)
 
 
@@ -157,7 +152,7 @@ class InfoWindow(ScreenHandle):
         self.len = 30
         clear = []
         self.data = collections.deque(clear, maxlen=self.len)
-        print(*args)
+        print(self.data)
 
     def update(self, value):
         self.data.append(f"> {str(value)}")
@@ -168,10 +163,12 @@ class InfoWindow(ScreenHandle):
 
         font = pygame.font.SysFont("comicsansms", 10)
         for i, text in enumerate(self.data):
+            # print(i, text)
             self.blit(font.render(text, True, colors["black"]), (5, 20 + 18 * i))
 
-    # FIXME
-    # draw next surface in chain
+
+        # FIXME
+        # draw next surface in chain
         return super().draw(canvas)
 
     def connect_engine(self, engine):
@@ -195,12 +192,14 @@ class HelpWindow(ScreenHandle):
         self.data.append(["Num+", "Zoom +"])
         self.data.append(["Num-", "Zoom -"])
         self.data.append([" R ", "Restart Game"])
-    # FIXME You can add some help information
+        # FIXME You can add some help information
+        self.data.append([" M ", 'Show mini map'])
         print(*args)
 
     def connect_engine(self, engine):
         # FIXME save engine and send it to next in chain
         self.engine = engine
+        self.engine.notify('Open help window')
         return super().connect_engine(self.engine)
 
     def draw(self, canvas):
@@ -216,9 +215,41 @@ class HelpWindow(ScreenHandle):
             for i, text in enumerate(self.data):
                 self.blit(font1.render(text[0], True, (128, 128, 255)), (50, 50 + 30 * i))
                 self.blit(font2.render(text[1], True, (128, 128, 255)), (150, 50 + 30 * i))
-    # FIXME
-    # draw next surface in chain
+        # FIXME
+        # draw next surface in chain
         return super().draw(canvas)
+
+
+class MiniMap(ScreenHandle):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.len = 30
+        clear = []
+        self.data = collections.deque(clear, maxlen=self.len)
+        print(*args)
+
+    def connect_engine(self, engine):
+        self.engine = engine
+        self.engine.notify('Open mini map')
+        return super().connect_engine(self.engine)
+
+    def draw(self, canvas):
+        alpha = 0
+        if self.engine.show_mini_map:
+            alpha = 128
+        self.fill((0, 0, 0, alpha))
+        size = self.get_size()
+        font1 = pygame.font.SysFont("courier", 24)
+        font2 = pygame.font.SysFont("serif", 24)
+        if self.engine.show_mini_map:
+            pygame.draw.lines(self, (255, 0, 0, 255), True, [(0, 0), (500, 0), (500, 500), (0, 500)], 5)
+            for i, text in enumerate(self.data):
+                self.blit(font1.render(text[0], True, (128, 128, 255)), (50, 50 + 30 * i))
+                self.blit(font2.render(text[1], True, (128, 128, 255)), (150, 50 + 30 * i))
+        return super().draw(canvas)
+
+
 '''
 ['add_hero', 'add_object', 'add_objects', 'delete_object', 'game_process', 'hero', 'interact', 
  'level', 'load_map', 'map', 'move_down', 'move_left', 'move_right', 'move_up', 'notify', 'objects', 
