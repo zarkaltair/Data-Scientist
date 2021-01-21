@@ -1,14 +1,6 @@
 from abc import ABC, abstractmethod
-import pygame
+# import pygame
 # import random
-
-
-def create_sprite(img, sprite_size):
-    icon = pygame.image.load(img).convert_alpha()
-    icon = pygame.transform.scale(icon, (sprite_size, sprite_size))
-    sprite = pygame.Surface((sprite_size, sprite_size), pygame.HWSURFACE)
-    sprite.blit(icon, (0, 0))
-    return sprite
 
 
 class AbstractObject(ABC):
@@ -81,7 +73,12 @@ class Hero(Creature):
             self.hp = self.max_hp
 
     def draw(self, display):
-        pass
+        # self.display = display
+        # print(self, display)
+        # return self.display.draw_hero
+        # self.display.draw_hero(icon)
+        print(dir(self))
+        # self.draw
 
 
 class Effect(Hero):
