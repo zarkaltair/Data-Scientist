@@ -47,17 +47,21 @@ class GameSurface(ScreenHandle):
         self.game_engine.hero.draw(self)
 
     def draw_map(self):
-
         # FIXME || calculate (min_x,min_y) - left top corner
-        # print(self.game_engine.sprite_size)
+        hero_pos = self.game_engine.hero.position
+        size_map = len(self.game_engine.map)
         min_x = 0
         min_y = 0
-
+        if hero_pos[0] > 5:
+            min_x += 1
+        print(hero_pos)
+        print([min_x, min_y], '-------------------')
         ##
-
         if self.game_engine.map:
             for i in range(len(self.game_engine.map[0]) - min_x):
+                print()
                 for j in range(len(self.game_engine.map) - min_y):
+                    print((i, j), end=' ')
                     self.blit(self.game_engine.map[min_y + j][min_x + i][0], 
                               (i * self.game_engine.sprite_size, j * self.game_engine.sprite_size))
         else:
@@ -65,8 +69,6 @@ class GameSurface(ScreenHandle):
 
     def draw_object(self, sprite, coord):
         size = self.game_engine.sprite_size
-        # print(sprite)
-        # print(coord)
         # FIXME || calculate (min_x,min_y) - left top corner
 
         min_x = 0
@@ -76,9 +78,10 @@ class GameSurface(ScreenHandle):
         self.blit(sprite, ((coord[0] - min_x) * self.game_engine.sprite_size,
                            (coord[1] - min_y) * self.game_engine.sprite_size))
 
+
     def draw(self, canvas):
         size = self.game_engine.sprite_size
-        # print(size)
+        # print(canvas)
         # FIXME || calculate (min_x,min_y) - left top corner
 
         min_x = 0
@@ -100,7 +103,7 @@ class ProgressBar(ScreenHandle):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fill(colors["wooden"])
-        print(*args)
+        # print(*args)
 
     def connect_engine(self, engine):
         # FIXME save engine and send it to next in chain
@@ -152,7 +155,7 @@ class InfoWindow(ScreenHandle):
         self.len = 30
         clear = []
         self.data = collections.deque(clear, maxlen=self.len)
-        print(self.data)
+        # print(self.data)
 
     def update(self, value):
         self.data.append(f"> {str(value)}")
@@ -194,7 +197,7 @@ class HelpWindow(ScreenHandle):
         self.data.append([" R ", "Restart Game"])
         # FIXME You can add some help information
         self.data.append([" M ", 'Show mini map'])
-        print(*args)
+        # print(*args)
 
     def connect_engine(self, engine):
         # FIXME save engine and send it to next in chain
@@ -227,7 +230,7 @@ class MiniMap(ScreenHandle):
         self.len = 30
         clear = []
         self.data = collections.deque(clear, maxlen=self.len)
-        print(*args)
+        # print(*args)
 
     def connect_engine(self, engine):
         self.engine = engine
