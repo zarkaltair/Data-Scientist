@@ -82,8 +82,22 @@ class MapFactory(yaml.YAMLObject):
         data = loader.construct_mapping(node)
         _map = cls.Map()
         _obj = cls.Objects()
-        # _obj.config.update(data)
+        _obj.config.update(data)
         return {'map': _map, 'obj': _obj}
+
+    @classmethod
+    def create_map(cls):
+        return cls.Map()
+
+    @classmethod
+    def create_objects(cls):
+        return cls.Objects()
+
+    class Map:
+        pass
+
+    class Objects:
+        pass
 
 
 class EndMap(MapFactory):
@@ -115,6 +129,7 @@ class EndMap(MapFactory):
     class Objects:
         def __init__(self):
             self.objects = []
+            self.config = {}
 
         def get_objects(self, _map):
             return self.objects
@@ -142,6 +157,7 @@ class RandomMap(MapFactory):
 
         def __init__(self):
             self.objects = []
+            self.config = {}
 
         def get_objects(self, _map):
 
@@ -231,6 +247,7 @@ class EmptyMap(MapFactory):
 
         def __init__(self):
             self.objects = []
+            self.config = {}
 
         def get_objects(self, _map):
 
@@ -318,6 +335,7 @@ class SpecialMap(MapFactory):
 
         def __init__(self):
             self.objects = []
+            self.config = {}
 
         def get_objects(self, _map):
 
