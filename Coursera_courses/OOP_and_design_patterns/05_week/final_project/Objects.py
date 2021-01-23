@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 
 class AbstractObject(ABC):
 
-    # @abstractmethod
+    @abstractmethod
     def draw(self, display):
         pass
 
@@ -53,6 +53,9 @@ class Enemy(Creature, Interactive):
         # self.action = action(engine, hero)
         pass
 
+    def draw(self, display):
+        display.draw_object(self.sprite, self.position)
+
 
 class Hero(Creature):
 
@@ -73,12 +76,7 @@ class Hero(Creature):
             self.hp = self.max_hp
 
     def draw(self, display):
-        # self.display = display
-        # print(self, display)
-        # return self.display.draw_hero
-        # self.display.draw_hero(icon)
-        print(dir(self))
-        # self.draw
+        display.draw_object(self.sprite, self.position)
 
 
 class Effect(Hero):
