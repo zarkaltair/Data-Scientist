@@ -27,6 +27,9 @@ class Ally(AbstractObject, Interactive):
     def interact(self, engine, hero):
         self.action(engine, hero)
 
+    def draw(self, display):
+        display.draw_object(self.sprite, self.position)
+
 
 class Creature(AbstractObject):
 
@@ -147,7 +150,7 @@ class Effect(Hero):
 # add classes
 class Berserk(Effect):
     def apply_effect(self):
-        stats = self.base.stats()
+        stats = self.base.stats
         stats['strength'] += 10
         stats['endurance'] += 10
         stats['intelligence'] -= 3
@@ -157,7 +160,7 @@ class Berserk(Effect):
 
 class Blessing(Effect):
     def apply_effect(self):
-        stats = self.base.stats()
+        stats = self.base.stats
         stats['strength'] += 5
         stats['endurance'] += 5
         stats['intelligence'] += 5
@@ -167,7 +170,7 @@ class Blessing(Effect):
 
 class Weakness(Effect):
     def apply_effect(self):
-        stats = self.base.stats()
+        stats = self.base.stats
         stats['strength'] -= 5
         stats['endurance'] -= 5
         stats['intelligence'] -= 5
