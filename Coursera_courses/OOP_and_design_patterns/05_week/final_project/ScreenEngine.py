@@ -50,18 +50,19 @@ class GameSurface(ScreenHandle):
         # FIXME || calculate (min_x,min_y) - left top corner
         hero_pos = self.game_engine.hero.position
         size_map = len(self.game_engine.map)
+        n = 5
         min_x = 0
         min_y = 0
-        if hero_pos[0] > 5:
-            min_x += 1
-        print(hero_pos)
-        print([min_x, min_y], '-------------------')
+        if hero_pos[0] > n:
+            min_x = hero_pos[0] - n
+        if hero_pos[1] > n:
+            min_y = hero_pos[1] - n
         ##
         if self.game_engine.map:
             for i in range(len(self.game_engine.map[0]) - min_x):
-                print()
+                # print()
                 for j in range(len(self.game_engine.map) - min_y):
-                    print((i, j), end=' ')
+                    # print((i, j), end=' ')
                     self.blit(self.game_engine.map[min_y + j][min_x + i][0], 
                               (i * self.game_engine.sprite_size, j * self.game_engine.sprite_size))
         else:
@@ -70,10 +71,15 @@ class GameSurface(ScreenHandle):
     def draw_object(self, sprite, coord):
         size = self.game_engine.sprite_size
         # FIXME || calculate (min_x,min_y) - left top corner
-
+        hero_pos = self.game_engine.hero.position
+        size_map = len(self.game_engine.map)
+        n = 5
         min_x = 0
         min_y = 0
-
+        if hero_pos[0] > n:
+            min_x = hero_pos[0] - n
+        if hero_pos[1] > n:
+            min_y = hero_pos[1] - n
         ##
         self.blit(sprite, ((coord[0] - min_x) * self.game_engine.sprite_size,
                            (coord[1] - min_y) * self.game_engine.sprite_size))
@@ -83,10 +89,15 @@ class GameSurface(ScreenHandle):
         size = self.game_engine.sprite_size
         # print(canvas)
         # FIXME || calculate (min_x,min_y) - left top corner
-
+        hero_pos = self.game_engine.hero.position
+        size_map = len(self.game_engine.map)
+        n = 5
         min_x = 0
         min_y = 0
-
+        if hero_pos[0] > n:
+            min_x = hero_pos[0] - n
+        if hero_pos[1] > n:
+            min_y = hero_pos[1] - n
         ##
         self.draw_map()
         for obj in self.game_engine.objects:
@@ -118,7 +129,7 @@ class ProgressBar(ScreenHandle):
         pygame.draw.rect(self, colors["red"], (50, 30, 200 * self.engine.hero.hp / self.engine.hero.max_hp, 30))
         pygame.draw.rect(self, colors["green"], (50, 70, 200 * self.engine.hero.exp / (100 * (2**(self.engine.hero.level - 1))), 30))
 
-        font = pygame.font.SysFont("comicsansms", 20)
+        font = pygame.font.SysFont("comicsansms", 22)
         self.blit(font.render(f'Hero at {self.engine.hero.position}', True, colors["black"]), (250, 0))
 
         self.blit(font.render(f'{self.engine.level} floor', True, colors["black"]), (10, 0))
@@ -155,20 +166,18 @@ class InfoWindow(ScreenHandle):
         self.len = 30
         clear = []
         self.data = collections.deque(clear, maxlen=self.len)
-        # print(self.data)
 
     def update(self, value):
+        print(value)
         self.data.append(f"> {str(value)}")
 
     def draw(self, canvas):
         self.fill(colors["wooden"])
         size = self.get_size()
 
-        font = pygame.font.SysFont("comicsansms", 10)
+        font = pygame.font.SysFont("comicsansms", 18)
         for i, text in enumerate(self.data):
-            # print(i, text)
             self.blit(font.render(text, True, colors["black"]), (5, 20 + 18 * i))
-
 
         # FIXME
         # draw next surface in chain
@@ -176,8 +185,8 @@ class InfoWindow(ScreenHandle):
 
     def connect_engine(self, engine):
         # FIXME set this class as Observer to engine and send it to next in chain
-        self.engine = engine
-        return super().connect_engine(self.engine)
+        engine.subscribe(self)
+        return super().connect_engine(engine)
 
 
 class HelpWindow(ScreenHandle):
@@ -202,7 +211,6 @@ class HelpWindow(ScreenHandle):
     def connect_engine(self, engine):
         # FIXME save engine and send it to next in chain
         self.engine = engine
-        self.engine.notify('Open help window')
         return super().connect_engine(self.engine)
 
     def draw(self, canvas):
@@ -234,7 +242,6 @@ class MiniMap(ScreenHandle):
 
     def connect_engine(self, engine):
         self.engine = engine
-        self.engine.notify('Open mini map')
         return super().connect_engine(self.engine)
 
     def draw(self, canvas):
