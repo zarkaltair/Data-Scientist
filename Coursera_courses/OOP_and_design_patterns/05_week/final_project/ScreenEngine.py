@@ -50,19 +50,16 @@ class GameSurface(ScreenHandle):
         # FIXME || calculate (min_x,min_y) - left top corner
         hero_pos = self.game_engine.hero.position
         size_map = len(self.game_engine.map)
-        n = 5
-        min_x = 0
-        min_y = 0
-        if hero_pos[0] > n:
-            min_x = hero_pos[0] - n
-        if hero_pos[1] > n:
-            min_y = hero_pos[1] - n
+        n_x, n_y = 5, 4
+        min_x, min_y = 0, 0
+        if hero_pos[0] > n_x:
+            min_x = hero_pos[0] - n_x
+        if hero_pos[1] > n_y:
+            min_y = hero_pos[1] - n_y
         ##
         if self.game_engine.map:
             for i in range(len(self.game_engine.map[0]) - min_x):
-                # print()
                 for j in range(len(self.game_engine.map) - min_y):
-                    # print((i, j), end=' ')
                     self.blit(self.game_engine.map[min_y + j][min_x + i][0], 
                               (i * self.game_engine.sprite_size, j * self.game_engine.sprite_size))
         else:
@@ -73,13 +70,12 @@ class GameSurface(ScreenHandle):
         # FIXME || calculate (min_x,min_y) - left top corner
         hero_pos = self.game_engine.hero.position
         size_map = len(self.game_engine.map)
-        n = 5
-        min_x = 0
-        min_y = 0
-        if hero_pos[0] > n:
-            min_x = hero_pos[0] - n
-        if hero_pos[1] > n:
-            min_y = hero_pos[1] - n
+        n_x, n_y = 5, 4
+        min_x, min_y = 0, 0
+        if hero_pos[0] > n_x:
+            min_x = hero_pos[0] - n_x
+        if hero_pos[1] > n_y:
+            min_y = hero_pos[1] - n_y
         ##
         self.blit(sprite, ((coord[0] - min_x) * self.game_engine.sprite_size,
                            (coord[1] - min_y) * self.game_engine.sprite_size))
@@ -87,17 +83,15 @@ class GameSurface(ScreenHandle):
 
     def draw(self, canvas):
         size = self.game_engine.sprite_size
-        # print(canvas)
         # FIXME || calculate (min_x,min_y) - left top corner
         hero_pos = self.game_engine.hero.position
         size_map = len(self.game_engine.map)
-        n = 5
-        min_x = 0
-        min_y = 0
-        if hero_pos[0] > n:
-            min_x = hero_pos[0] - n
-        if hero_pos[1] > n:
-            min_y = hero_pos[1] - n
+        n_x, n_y = 5, 4
+        min_x, min_y = 0, 0
+        if hero_pos[0] > n_x:
+            min_x = hero_pos[0] - n_x
+        if hero_pos[1] > n_y:
+            min_y = hero_pos[1] - n_y
         ##
         self.draw_map()
         for obj in self.game_engine.objects:
@@ -114,7 +108,6 @@ class ProgressBar(ScreenHandle):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fill(colors["wooden"])
-        # print(*args)
 
     def connect_engine(self, engine):
         # FIXME save engine and send it to next in chain
@@ -168,7 +161,6 @@ class InfoWindow(ScreenHandle):
         self.data = collections.deque(clear, maxlen=self.len)
 
     def update(self, value):
-        print(value)
         self.data.append(f"> {str(value)}")
 
     def draw(self, canvas):
@@ -206,7 +198,6 @@ class HelpWindow(ScreenHandle):
         self.data.append([" R ", "Restart Game"])
         # FIXME You can add some help information
         self.data.append([" M ", 'Show mini map'])
-        # print(*args)
 
     def connect_engine(self, engine):
         # FIXME save engine and send it to next in chain
@@ -238,7 +229,6 @@ class MiniMap(ScreenHandle):
         self.len = 30
         clear = []
         self.data = collections.deque(clear, maxlen=self.len)
-        # print(*args)
 
     def connect_engine(self, engine):
         self.engine = engine
