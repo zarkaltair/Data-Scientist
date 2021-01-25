@@ -1,6 +1,4 @@
 from abc import ABC, abstractmethod
-# import pygame
-# import random
 
 
 class AbstractObject(ABC):
@@ -53,8 +51,9 @@ class Enemy(Creature, Interactive):
         self.position = position
 
     def interact(self, engine, hero):
-        # self.action = action(engine, hero)
-        pass
+        hero.hp -= self.stats['strength']
+        hero.exp += self.stats['experience']
+        hero.level_up()
 
     def draw(self, display):
         display.draw_object(self.sprite, self.position)
@@ -71,7 +70,6 @@ class Hero(Creature):
 
     def level_up(self):
         while self.exp >= 100 * (2 ** (self.level - 1)):
-            yield "level up!"
             self.level += 1
             self.stats["strength"] += 2
             self.stats["endurance"] += 2
