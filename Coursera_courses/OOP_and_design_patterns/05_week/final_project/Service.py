@@ -20,7 +20,6 @@ def create_sprite(img, sprite_size):
 
 
 def reload_game(engine, hero):
-    # global level_list
     level_list_max = len(level_list) - 1
     engine.level += 1
     hero.position = [1, 1]
@@ -56,7 +55,7 @@ def remove_effect(engine, hero):
     if hero.gold >= int(10 * 1.5**engine.level) - 2 * hero.stats["intelligence"] and "base" in dir(hero):
         hero.gold -= int(10 * 1.5**engine.level) - 2 * hero.stats["intelligence"]
         engine.hero = hero.base
-        engine.hero.calc_max_HP()
+        engine.hero.calc_max_hp()
         engine.notify("Effect removed")
 
 
@@ -77,10 +76,8 @@ class MapFactory(yaml.YAMLObject):
     @classmethod
     def from_yaml(cls, loader, node):
 
-        # FIXME
-        # get _map and _obj
+        # FIXME get _map and _obj
         data = loader.construct_mapping(node)
-        # print(data)
         _map = cls.Map()
         _obj = cls.Objects()
         _obj.config.update(data)
@@ -103,7 +100,6 @@ class MapFactory(yaml.YAMLObject):
 
 class EndMap(MapFactory):
     yaml_tag = "!end_map"
-    print(yaml_tag)
 
     class Map:
         def __init__(self):
@@ -138,7 +134,6 @@ class EndMap(MapFactory):
 
 class RandomMap(MapFactory):
     yaml_tag = "!random_map"
-    print(yaml_tag)
 
     class Map:
 
@@ -159,9 +154,7 @@ class RandomMap(MapFactory):
 
         def __init__(self):
             self.objects = []
-            # print(self.objects, 'Objects')
             self.config = {}
-            # print(self.config, 'Config')
 
         def get_objects(self, _map):
 
@@ -223,15 +216,13 @@ class RandomMap(MapFactory):
                                          random.randint(1, 39))
 
                     self.objects.append(Objects.Enemy(prop['sprite'], prop, prop['experience'], coord))
-            # print(self.objects) 
+
             return self.objects
 
 
-# FIXME
-# add classes for YAML !empty_map and !special_map{}
+# FIXME add classes for YAML !empty_map and !special_map{}
 class EmptyMap(MapFactory):
     yaml_tag = '!empty_map'
-    print(yaml_tag)
 
     class Map:
 
@@ -253,8 +244,6 @@ class EmptyMap(MapFactory):
         def __init__(self):
             self.objects = []
             self.config = {}
-            # print(self.objects, 'Objects')
-            # print(self.config, 'Config')
 
         def get_objects(self, _map):
             for obj_name in object_list_prob['objects']:
@@ -276,14 +265,12 @@ class EmptyMap(MapFactory):
                                          random.randint(1, 39))
             
                     self.objects.append(Objects.Ally(prop['sprite'], prop['action'], coord))
-            # print(self.objects, 'final')
-            # print(self.config, 'final')
+
             return self.objects
 
 
 class SpecialMap(MapFactory):
     yaml_tag = '!special_map'
-    print(yaml_tag)
 
     class Map:
 
@@ -446,13 +433,4 @@ def service_init(sprite_size, full=True):
         'dragon': {'sprite': ['dragon.png'], 'strength': 50, 'endurance': 50, 'intelligence': 50, 'luck': 5, 'experience': 1000}
         }
     }
-
-[
-    {'map': <Service.EmptyMap.Map object at 0x7f3b4dd6b9a0>, 'obj': <Service.EmptyMap.Objects object at 0x7f3b4dd6b730>}, 
-    {'map': <Service.SpecialMap.Map object at 0x7f3b4dd6ba60>, 'obj': <Service.SpecialMap.Objects object at 0x7f3b4dd6b4c0>}, 
-    {'map': <Service.SpecialMap.Map object at 0x7f3b4dd6b490>, 'obj': <Service.SpecialMap.Objects object at 0x7f3b4dd6b3a0>}, 
-    {'map': <Service.SpecialMap.Map object at 0x7f3b4dd6b970>, 'obj': <Service.SpecialMap.Objects object at 0x7f3b4dd6b940>}, 
-    {'map': <Service.RandomMap.Map object at 0x7f3b4dd6b880>, 'obj': <Service.RandomMap.Objects object at 0x7f3b4dd6b220>}, 
-    {'map': <Service.EndMap.Map object at 0x7f3b7476e7f0>, 'obj': <Service.EndMap.Objects object at 0x7f3b4deff850>}
-    ]
 '''
