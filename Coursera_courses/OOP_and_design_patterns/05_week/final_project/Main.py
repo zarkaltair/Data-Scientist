@@ -34,11 +34,11 @@ def create_game(sprite_size, is_new):
         Service.service_init(sprite_size)
         Service.reload_game(engine, hero)
         # create chain of responsibilities
-        drawer = SE.GameSurface((640, 480), pygame.SRCALPHA, (0, 480), 
-                                SE.ProgressBar((640, 120), (640, 0),
-                                               SE.InfoWindow((160, 600), (50, 50), 
-                                                             SE.HelpWindow((700, 500), pygame.SRCALPHA, (0, 0),
-                                                                           SE.MiniMap((500, 500), pygame.SRCALPHA, (0, 0),
+        drawer = SE.GameSurface((660, 480), pygame.SRCALPHA, (0, 480), 
+                                SE.ProgressBar((660, 120), (660, 0),
+                                               SE.InfoWindow((140, 600), (50, 50), 
+                                                             SE.HelpWindow((700, 500), pygame.SRCALPHA, (410, 230),
+                                                                           SE.MiniMap((250, 250), pygame.SRCALPHA, (100, 100),
                                                                                       SE.ScreenHandle((0, 0)))))))
 
     else:
