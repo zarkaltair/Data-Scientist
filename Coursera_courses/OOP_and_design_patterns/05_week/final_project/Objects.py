@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import Service
 
 
 class AbstractObject(ABC):
@@ -52,8 +53,13 @@ class Enemy(Creature, Interactive):
 
     def interact(self, engine, hero):
         hero.hp -= self.stats['strength']
-        hero.exp += self.stats['experience']
-        hero.level_up()
+        if hero.hp <= 0:
+            Service.reload_game(engine, hero)
+            Service.restore_hp(engine, hero)
+            engine.notify('You died')
+        else:
+            hero.exp += self.stats['experience']
+            hero.level_up()
 
     def draw(self, display):
         display.draw_object(self.sprite, self.position)
@@ -173,4 +179,14 @@ class Weakness(Effect):
         stats['endurance'] -= 5
         stats['intelligence'] -= 5
         stats['luck'] -= 5
+        return stats
+
+
+class EvilEye(Effect):
+    def apply_effect(self):
+        stats = self.base.stats
+        stats['strength'] -= 7
+        stats['endurance'] -= 7
+        stats['intelligence'] -= 7
+        stats['luck'] -= 7
         return stats
