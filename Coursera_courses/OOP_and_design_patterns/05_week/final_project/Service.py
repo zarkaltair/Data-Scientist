@@ -64,6 +64,10 @@ def add_gold(engine, hero):
         engine.score -= 0.05
         engine.hero = Objects.Weakness(hero)
         engine.notify("You were cursed")
+    elif random.randint(1, 10) == 7:
+        engine.score -= 0.05
+        engine.hero = Objects.EvilEye(hero)
+        engine.notify('You were evileyed')
     else:
         engine.score += 0.1
         gold = int(random.randint(10, 1000) * (1.1**(engine.hero.level - 1)))
