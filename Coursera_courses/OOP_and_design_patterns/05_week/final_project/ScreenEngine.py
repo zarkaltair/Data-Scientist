@@ -241,16 +241,16 @@ class MiniMap(ScreenHandle):
         self.blit(sprite, ((coord[0] - min_x) * n, (coord[1] - min_y) * n))
 
     def draw(self, canvas):
-        alpha = 0
         if self.engine.show_mini_map:
-            alpha = 128
+            self.set_alpha(200)
             min_x, min_y, n = 0, 0, 6.1
             self.draw_map()
             for obj in self.engine.objects:
-                self.blit(obj.sprite[0], ((obj.position[0] - min_x) * n, (obj.position[1] - min_y) * n))
+                self.blit(pygame.transform.scale(obj.sprite[0], [25, 25]), 
+                          ((obj.position[0] - min_x) * n, (obj.position[1] - min_y) * n))
             self.draw_hero()
         else:
-            self.fill((0, 0, 0, alpha))
+            self.fill((0, 0, 0, 0))
 
         if self.engine.show_mini_map:
             pygame.draw.lines(self, (0, 255, 0, 255), True, [(0, 0), (248, 0), (248, 248), (0, 248)], 2)
