@@ -24,36 +24,45 @@ base_stats = {
     "intelligence": 5,
     "luck": 5
 }
+size = 60
+
+
+def create_hero():
+    return Objects.Hero(base_stats, Service.create_sprite(os.path.join("texture", "Hero.png"), size))
+
+
+# create chain of responsibilities
+def create_chain():
+    return SE.GameSurface((660, 480), pygame.SRCALPHA, (0, 480), 
+           SE.ProgressBar((660, 120), (660, 0),
+           SE.InfoWindow((140, 600), (50, 50), 
+           SE.HelpWindow((700, 500), pygame.SRCALPHA, (410, 230),
+           SE.MiniMap((250, 250), pygame.SRCALPHA, (100, 100),
+           SE.ScreenHandle((0, 0)))))))
+
+
+def create_engine():
+    return Logic.GameEngine()
 
 
 def create_game(sprite_size, is_new):
-    global hero, engine, drawer, iteration
+    global iteration, engine, hero, drawer
     if is_new:
-        hero = Objects.Hero(base_stats, Service.create_sprite(os.path.join("texture", "Hero.png"), sprite_size))
-        engine = Logic.GameEngine()
+        hero = create_hero()
+        engine = create_engine()
+        drawer = create_chain()
         Service.service_init(sprite_size)
         Service.reload_game(engine, hero)
-        # create chain of responsibilities
-        drawer = SE.GameSurface((660, 480), pygame.SRCALPHA, (0, 480), 
-                                SE.ProgressBar((660, 120), (660, 0),
-                                               SE.InfoWindow((140, 600), (50, 50), 
-                                                             SE.HelpWindow((700, 500), pygame.SRCALPHA, (410, 230),
-                                                                           SE.MiniMap((250, 250), pygame.SRCALPHA, (100, 100),
-                                                                                      SE.ScreenHandle((0, 0)))))))
-
     else:
         engine.sprite_size = sprite_size
         hero.sprite = Service.create_sprite(os.path.join("texture", "Hero.png"), sprite_size)
         Service.service_init(sprite_size, False)
 
     Logic.GameEngine.sprite_size = sprite_size
-
     drawer.connect_engine(engine)
-
     iteration = 0
 
 
-size = 60
 create_game(size, True)
 
 while engine.working:
