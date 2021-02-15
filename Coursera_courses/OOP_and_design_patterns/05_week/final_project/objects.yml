@@ -15,6 +15,11 @@ ally:
     action: apply_blessing
     min-count: 1
     max-count: 6
+  berserk:
+    sprite: [NPC_1.png]
+    action: apply_berserk
+    min-count: 3
+    max-count: 7
   remove:
     sprite: [NPC_2.png]
     action: remove_effect
@@ -33,6 +38,13 @@ enemies:
     intelligence: 2
     luck: 1
     experience: 50
+  super_rat:
+    sprite: [rat.png]
+    strength: 12
+    endurance: 11
+    intelligence: 19
+    luck: 3
+    experience: 150
   knight:
     sprite: [Enemy_1.png]
     strength: 15
@@ -40,6 +52,13 @@ enemies:
     intelligence: 15
     luck: 10
     experience: 200
+  super_knight:
+    sprite: [Enemy_1.png]
+    strength: 23
+    endurance: 17
+    intelligence: 30
+    luck: 11
+    experience: 388
   naga:
     sprite: [Naga.png]
     strength: 25
@@ -47,6 +66,13 @@ enemies:
     intelligence: 25
     luck: 10
     experience: 500
+  super_naga:
+    sprite: [Naga.png]
+    strength: 44
+    endurance: 40
+    intelligence: 39
+    luck: 18
+    experience: 700
   dragon:
     sprite: [dragon.png]
     strength: 50
@@ -54,3 +80,10 @@ enemies:
     intelligence: 50
     luck: 5
     experience: 1000
+  super_dragon:
+    sprite: [dragon.png]
+    strength: 77
+    endurance: 70
+    intelligence: 61
+    luck: 7
+    experience: 1200
