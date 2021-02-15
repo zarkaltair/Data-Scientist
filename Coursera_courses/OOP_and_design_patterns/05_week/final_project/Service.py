@@ -29,6 +29,7 @@ def reload_game(engine, hero):
     engine.load_map(_map)
     engine.add_objects(generator['obj'].get_objects(_map))
     engine.add_hero(hero)
+    engine.notify("Game was reloaded")
 
 
 def restore_hp(engine, hero):
@@ -44,7 +45,15 @@ def apply_blessing(engine, hero):
         if random.randint(0, 1) == 0:
             engine.hero = Objects.Blessing(hero)
             engine.notify("Blessing applied")
-        else:
+    else:
+        engine.score -= 0.1
+
+
+def apply_berserk(engine, hero):
+    if hero.gold >= int(20 * 1.5**engine.level) - 2 * hero.stats["intelligence"]:
+        engine.score += 0.2
+        hero.gold -= int(20 * 1.5**engine.level) - 2 * hero.stats["intelligence"]
+        if random.randint(0, 1) == 0:
             engine.hero = Objects.Berserk(hero)
             engine.notify("Berserk applied")
     else:
@@ -60,11 +69,11 @@ def remove_effect(engine, hero):
 
 
 def add_gold(engine, hero):
-    if random.randint(1, 10) == 1:
+    if random.randint(1, 5) == 1:
         engine.score -= 0.05
         engine.hero = Objects.Weakness(hero)
         engine.notify("You were cursed")
-    elif random.randint(1, 10) == 7:
+    elif random.randint(1, 5) == 2:
         engine.score -= 0.05
         engine.hero = Objects.EvilEye(hero)
         engine.notify('You were evileyed')
@@ -388,6 +397,7 @@ def service_init(sprite_size, full=True):
     object_list_actions = {'reload_game': reload_game,
                            'add_gold': add_gold,
                            'apply_blessing': apply_blessing,
+                           'apply_berserk': apply_berserk,
                            'remove_effect': remove_effect,
                            'restore_hp': restore_hp}
 
