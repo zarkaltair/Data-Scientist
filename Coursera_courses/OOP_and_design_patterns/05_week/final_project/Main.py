@@ -11,7 +11,7 @@ SCREEN_DIM = (800, 600)
 
 pygame.init()
 gameDisplay = pygame.display.set_mode(SCREEN_DIM)
-pygame.display.set_caption("MyRPG")
+pygame.display.set_caption("My first true RPG)))")
 KEYBOARD_CONTROL = True
 
 if not KEYBOARD_CONTROL:
