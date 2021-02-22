@@ -18,30 +18,26 @@ class Vec2d:
         """"возвращает разность двух векторов"""
         return self.v[0] - obj[0], self.v[1] - obj[1]
 
-
     def __add__(self, obj):
         """возвращает сумму двух векторов"""
         return self.v[0] + obj[0], self.v[1] + obj[1]
-
 
     def __mul__(self, obj):
         """возвращает произведение вектора на число"""
         return self.v[0] * obj, self.v[1] * obj
 
+    def __len__(self):
+        """возвращает длину вектора"""
+        return (self.x[0] ** 2 + self.x[1] ** 2) ** 0.5
 
-    # def length(self, x):
-    #     """возвращает длину вектора"""
-    #     return (self.x[0] * self.x[0] + self.x[1] * self.x[1]) ** 0.5
+    def vec(self, obj):
+        """возвращает пару координат, определяющих вектор (координаты точки конца вектора),
+        координаты начальной точки вектора совпадают с началом системы координат (0, 0)"""
+        return sub(self.v[0], self.v[1])
 
-
-    # def vec(self, x, y):
-    #     """возвращает пару координат, определяющих вектор (координаты точки конца вектора),
-    #     координаты начальной точки вектора совпадают с началом системы координат (0, 0)"""
-    #     return sub(self.y, self.x)
-
-    # def int_pair(self, x, y):
-    #     """возвращает кортеж из двух целых чисел (текущие координаты вектора)"""
-    #     pass
+    def int_pair(self):
+        """возвращает кортеж из двух целых чисел (текущие координаты вектора)"""
+        return self.v[0], self.v[1]
 
 
 # =======================================================================================
@@ -60,47 +56,17 @@ class Polyline:
             for p in points:
                 pygame.draw.circle(gameDisplay, color, (int(p[0]), int(p[1])), width)
 
-
-    def draw_help(self):
-        """функция отрисовки экрана справки программы"""
-        gameDisplay.fill((50, 50, 50))
-        font1 = pygame.font.SysFont("courier", 24)
-        font2 = pygame.font.SysFont("serif", 24)
-        data = []
-        data.append(["F1", "Show Help"])
-        data.append(["R", "Restart"])
-        data.append(["P", "Pause/Play"])
-        # data.append(["Num+", "More points"])
-        # data.append(["Num-", "Less points"])
-        data.append(["", ""])
-        data.append([str(steps), "Current points"])
-
-        pygame.draw.lines(gameDisplay, (255, 50, 50, 255), True, [
-            (0, 0), (800, 0), (800, 600), (0, 600)], 5)
-        for i, text in enumerate(data):
-            gameDisplay.blit(font1.render(
-                text[0], True, (128, 128, 255)), (100, 100 + 30 * i))
-            gameDisplay.blit(font2.render(
-                text[1], True, (128, 128, 255)), (200, 100 + 30 * i))
-
-
     # =======================================================================================
     # Функции, отвечающие за расчет сглаживания ломаной
     # =======================================================================================
     def get_point(self, points, alpha, deg=None):
-        # print('_____________iter rec_____________')
         if deg is None:
             deg = len(points) - 1
         if deg == 0:
             return points[0]
-        # print('deg = ', deg)
         v1 = Vec2d(points[deg]) * alpha
-        # print('v1 =', v1)
-        # print(points)
         v2 = self.get_point(points, alpha, deg - 1)
-        # print('v2 =', v2)
         return Vec2d(v1) + Vec2d(v2) * (1 - alpha)
-
 
     def get_points(self, base_points, count):
         alpha = 1 / count
@@ -108,7 +74,6 @@ class Polyline:
         for i in range(count):
             res.append(self.get_point(base_points, i * alpha))
         return res
-
 
     def set_points(self, points, speeds):
         """функция перерасчета координат опорных точек"""
@@ -135,13 +100,47 @@ class Knot(Polyline):
         return res
 
 
+def draw_help():
+    """функция отрисовки экрана справки программы"""
+    font1 = pygame.font.SysFont("courier", 24)
+    font2 = pygame.font.SysFont("serif", 24)
+
+    data = []
+    data.append(["F1", "Show Help"])
+    data.append(["R", "Restart screen saver"])
+    data.append(["P", "Pause/Play"])
+    data.append(["M", "Add transitional point"])
+    data.append(["N", "Remove transitional points"])
+    data.append(["U", "Speed Up"])
+    data.append(["D", "Speed Down"])
+    data.append(["T", "Add anchor point"])
+    data.append(["Y", "Remove anchor point"])
+    data.append(["", ""])
+    data.append([str(steps), "Current points"])
+
+    surf = pygame.Surface((800, 600))
+    surf.fill((50, 50, 50))
+    surf.set_alpha(200)
+    
+    pygame.draw.lines(surf, (0, 250, 0, 255), True, [
+        (0, 0), (800, 0), (800, 600), (0, 600)], 3)
+
+    for i, text in enumerate(data):
+        surf.blit(font1.render(
+            text[0], True, (128, 128, 255)), (100, 100 + 30 * i))
+        surf.blit(font2.render(
+            text[1], True, (128, 128, 255)), (200, 100 + 30 * i))
+
+    gameDisplay.blit(surf, (0, 0))
+
+
 # =======================================================================================
 # Основная программа
 # =======================================================================================
 if __name__ == "__main__":
     pygame.init()
     gameDisplay = pygame.display.set_mode(SCREEN_DIM)
-    pygame.display.set_caption("MyScreenSaver")
+    pygame.display.set_caption("My Screen Saver")
 
     steps = 10
     working = True
@@ -168,16 +167,28 @@ if __name__ == "__main__":
                     speeds = []
                 if event.key == pygame.K_p:
                     pause = not pause
-                if event.key == pygame.K_KP_PLUS:
+                if event.key == pygame.K_m:
                     steps += 1
                 if event.key == pygame.K_F1:
                     show_help = not show_help
-                if event.key == pygame.K_KP_MINUS:
+                if event.key == pygame.K_n:
                     steps -= 1 if steps > 1 else 0
+                if event.key == pygame.K_u:
+                    speeds = [tuple(j * 2 for j in i) for i in speeds]
+                if event.key == pygame.K_d:
+                    speeds = [tuple(j * 0.5 for j in i) for i in speeds]
+                if event.key == pygame.K_t:
+                    points.append((400, 300))
+                    speeds.append((random.random() * 2, random.random() * 2))
+                if event.key == pygame.K_y:
+                    points.pop()
+                    speeds.pop()
+
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 points.append(event.pos)
                 speeds.append((random.random() * 2, random.random() * 2))
+
 
         gameDisplay.fill((0, 0, 0))
         hue = (hue + 1) % 360
@@ -187,7 +198,7 @@ if __name__ == "__main__":
         if not pause:
             a.set_points(points, speeds)
         if show_help:
-            a.draw_help()
+            draw_help()
 
         pygame.display.flip()
 
