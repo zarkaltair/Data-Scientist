@@ -44,28 +44,33 @@ class Vec2d:
 # Функции отрисовки
 # =======================================================================================
 class Polyline:
-    def draw_points(self, points, style='points', width=3, color=(255, 255, 255)):
+    def __init__(self, points, speeds):
+        self.points = points
+        self.speeds = speeds
+
+    def draw_points(self, style='points', width=3, color=(255, 255, 255)):
         """функция отрисовки точек на экране"""
         if style == "line":
-            for p_n in range(-1, len(points) - 1):
+            for p_n in range(-1, len(self.points) - 1):
                 pygame.draw.line(gameDisplay, color,
-                                 (int(points[p_n][0]), int(points[p_n][1])),
-                                 (int(points[p_n + 1][0]), int(points[p_n + 1][1])), width)
+                                 (int(self.points[p_n][0]), int(self.points[p_n][1])),
+                                 (int(self.points[p_n + 1][0]), 
+                                  int(self.points[p_n + 1][1])), width)
 
         elif style == "points":
-            for p in points:
+            for p in self.points:
                 pygame.draw.circle(gameDisplay, color, (int(p[0]), int(p[1])), width)
 
     # =======================================================================================
     # Функции, отвечающие за расчет сглаживания ломаной
     # =======================================================================================
-    def get_point(self, points, alpha, deg=None):
+    def get_point(self, base_points, alpha, deg=None):
         if deg is None:
-            deg = len(points) - 1
+            deg = len(base_points) - 1
         if deg == 0:
-            return points[0]
-        v1 = Vec2d(points[deg]) * alpha
-        v2 = self.get_point(points, alpha, deg - 1)
+            return base_points[0]
+        v1 = Vec2d(base_points[int(deg)]) * alpha
+        v2 = self.get_point(base_points, alpha, deg - 1)
         return Vec2d(v1) + Vec2d(v2) * (1 - alpha)
 
     def get_points(self, base_points, count):
@@ -75,28 +80,32 @@ class Polyline:
             res.append(self.get_point(base_points, i * alpha))
         return res
 
-    def set_points(self, points, speeds):
+    def set_points(self):
         """функция перерасчета координат опорных точек"""
-        for p in range(len(points)):
-            points[p] = Vec2d(points[p]) + speeds[p]
-            if points[p][0] > SCREEN_DIM[0] or points[p][0] < 0:
-                speeds[p] = (- speeds[p][0], speeds[p][1])
-            if points[p][1] > SCREEN_DIM[1] or points[p][1] < 0:
-                speeds[p] = (speeds[p][0], -speeds[p][1])
+        for p in range(len(self.points)):
+            self.points[p] = Vec2d(self.points[p]) + self.speeds[p]
+            if self.points[p][0] > SCREEN_DIM[0] or self.points[p][0] < 0:
+                self.speeds[p] = (-self.speeds[p][0], self.speeds[p][1])
+            if self.points[p][1] > SCREEN_DIM[1] or self.points[p][1] < 0:
+                self.speeds[p] = (self.speeds[p][0], -self.speeds[p][1])
 
 
 class Knot(Polyline):
-    def get_knot(self, points, count):
-        if len(points) < 3:
+    def __init__(self, points, count=0):
+        self.points = points
+        self.count = count
+
+    def get_knot(self):
+        if len(self.points) < 3:
             return []
         res = []
-        for i in range(-2, len(points) - 2):
+        for i in range(-2, len(self.points) - 2):
             ptn = []
-            ptn.append((Vec2d(Vec2d(points[i]) + points[i + 1]) * 0.5))
-            ptn.append(Vec2d(points[i + 1]) * 1)
-            ptn.append((Vec2d(Vec2d(points[i + 1]) + points[i + 2]) * 0.5))
+            ptn.append((Vec2d(Vec2d(self.points[i]) + self.points[i + 1]) * 0.5))
+            ptn.append(Vec2d(self.points[i + 1]) * 1)
+            ptn.append((Vec2d(Vec2d(self.points[i + 1]) + self.points[i + 2]) * 0.5))
 
-            res.extend(self.get_points(ptn, count))
+            res.extend(self.get_points(ptn, self.count))
         return res
 
 
@@ -152,8 +161,6 @@ if __name__ == "__main__":
     width = 3
     hue = 0
     color = pygame.Color(0)
-    a = Polyline()
-    b = Knot()
 
     while working:
         for event in pygame.event.get():
@@ -181,22 +188,27 @@ if __name__ == "__main__":
                     points.append((400, 300))
                     speeds.append((random.random() * 2, random.random() * 2))
                 if event.key == pygame.K_y:
-                    points.pop()
-                    speeds.pop()
-
+                    try:
+                        points.pop()
+                        speeds.pop()
+                    except:
+                        pass
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 points.append(event.pos)
                 speeds.append((random.random() * 2, random.random() * 2))
 
 
+        polyline = Polyline(points, speeds)
+        anchor = Knot(polyline.points, steps)
         gameDisplay.fill((0, 0, 0))
         hue = (hue + 1) % 360
         color.hsla = (hue, 100, 50, 100)
-        a.draw_points(points)
-        a.draw_points(b.get_knot(points, steps), "line", 3, color)
+        polyline.draw_points()
+        spline = Polyline(anchor.get_knot(), speeds)
+        spline.draw_points(style="line", color=color)
         if not pause:
-            a.set_points(points, speeds)
+            polyline.set_points()
         if show_help:
             draw_help()
 
